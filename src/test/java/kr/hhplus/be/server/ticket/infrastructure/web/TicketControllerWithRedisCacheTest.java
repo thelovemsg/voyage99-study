@@ -3,8 +3,8 @@ package kr.hhplus.be.server.ticket.infrastructure.web;
 
 import kr.hhplus.be.server.common.redis.RedisCacheTemplate;
 import kr.hhplus.be.server.common.utils.IdUtils;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.dto.GetTicketCommandDto;
-import kr.hhplus.be.server.ticket.application.ticket.service.GetTicketCacheServiceImpl;
+import kr.hhplus.be.server.ticket.application.port.in.dto.GetTicketCommandDto;
+import kr.hhplus.be.server.ticket.application.service.GetTicketCacheServiceImpl;
 import kr.hhplus.be.server.ticket.domain.enums.TicketStatusEnum;
 import kr.hhplus.be.server.ticket.domain.model.Ticket;
 import kr.hhplus.be.server.ticket.infrastructure.persistence.ticket.TicketEntity;

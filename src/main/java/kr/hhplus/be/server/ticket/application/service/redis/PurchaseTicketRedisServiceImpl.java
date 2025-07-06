@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.ticket.application.ticket.service.redis;
+package kr.hhplus.be.server.ticket.application.service.redis;
 
 import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.common.event.ConcertSoldOutEvent;
@@ -8,8 +8,8 @@ import kr.hhplus.be.server.common.messages.MessageCode;
 import kr.hhplus.be.server.common.redis.RedisCacheTemplate;
 import kr.hhplus.be.server.common.redis.RedisDistributedLockTemplate;
 import kr.hhplus.be.server.common.redis.RedisKeyUtils;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.PurchaseTicketRedisUseCase;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.dto.PurchaseTicketCommandDto;
+import kr.hhplus.be.server.ticket.application.port.in.PurchaseTicketRedisUseCase;
+import kr.hhplus.be.server.ticket.application.port.in.dto.PurchaseTicketCommandDto;
 import kr.hhplus.be.server.ticket.domain.model.Ticket;
 import kr.hhplus.be.server.ticket.domain.repository.TicketRepository;
 import kr.hhplus.be.server.ticket.domain.service.TicketDomainService;

@@ -1,7 +1,7 @@
-package kr.hhplus.be.server.ticket.application.ticket.service;
+package kr.hhplus.be.server.ticket.application.service;
 
-import kr.hhplus.be.server.ticket.application.ticket.port.in.dto.CancelTicketCommandDto;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.CancelTicketUseCase;
+import kr.hhplus.be.server.ticket.application.port.in.dto.CancelTicketCommandDto;
+import kr.hhplus.be.server.ticket.application.port.in.CancelTicketUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

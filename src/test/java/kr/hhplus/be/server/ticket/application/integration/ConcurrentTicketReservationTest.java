@@ -2,8 +2,8 @@ package kr.hhplus.be.server.ticket.application.integration;
 
 import kr.hhplus.be.server.common.exceptions.ParameterNotValidException;
 import kr.hhplus.be.server.common.utils.IdUtils;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.dto.ReserveTicketCommandDto;
-import kr.hhplus.be.server.ticket.application.ticket.service.ReserveTicketServiceImpl;
+import kr.hhplus.be.server.ticket.application.port.in.dto.ReserveTicketCommandDto;
+import kr.hhplus.be.server.ticket.application.service.ReserveTicketServiceImpl;
 import kr.hhplus.be.server.ticket.domain.enums.TicketStatusEnum;
 import kr.hhplus.be.server.ticket.domain.model.Ticket;
 import kr.hhplus.be.server.ticket.infrastructure.persistence.ticket.TicketRepositoryImpl;

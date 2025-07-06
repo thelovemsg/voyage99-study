@@ -1,10 +1,10 @@
-package kr.hhplus.be.server.ticket.application.ticket.service;
+package kr.hhplus.be.server.ticket.application.service;
 
 import jakarta.transaction.Transactional;
 import kr.hhplus.be.server.common.exceptions.ParameterNotValidException;
 import kr.hhplus.be.server.common.messages.MessageCode;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.ReserveTicketUseCase;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.dto.ReserveTicketCommandDto;
+import kr.hhplus.be.server.ticket.application.port.in.ReserveTicketUseCase;
+import kr.hhplus.be.server.ticket.application.port.in.dto.ReserveTicketCommandDto;
 import kr.hhplus.be.server.ticket.domain.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,11 +1,11 @@
-package kr.hhplus.be.server.ticket.application.ticket.port.in.dto;
+package kr.hhplus.be.server.ticket.application.port.in.dto;
 
 import lombok.*;
 
 import java.math.BigDecimal;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ReserveTicketCommandDto {
+public class PurchaseTicketCommandDto {
 
     @Getter
     @Setter
@@ -27,5 +27,6 @@ public class ReserveTicketCommandDto {
     @Builder
     public static class Response {
         private Long ticketId;
+        private boolean isSuccess;
     }
 }

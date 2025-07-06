@@ -1,9 +1,9 @@
-package kr.hhplus.be.server.ticket.application.ticket.service;
+package kr.hhplus.be.server.ticket.application.service;
 
 import kr.hhplus.be.server.common.exceptions.ParameterNotValidException;
 import kr.hhplus.be.server.common.messages.MessageCode;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.GetTicketUseCase;
-import kr.hhplus.be.server.ticket.application.ticket.port.in.dto.GetTicketCommandDto;
+import kr.hhplus.be.server.ticket.application.port.in.GetTicketUseCase;
+import kr.hhplus.be.server.ticket.application.port.in.dto.GetTicketCommandDto;
 import kr.hhplus.be.server.ticket.domain.model.Ticket;
 import kr.hhplus.be.server.ticket.infrastructure.persistence.ticket.TicketRepositoryImpl;
 import lombok.RequiredArgsConstructor;
