@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.common.event;
+package kr.hhplus.be.server.concert.event;
 
 import java.time.LocalDateTime;
 

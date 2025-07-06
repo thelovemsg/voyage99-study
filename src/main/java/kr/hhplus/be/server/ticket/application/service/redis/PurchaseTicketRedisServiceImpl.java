@@ -1,13 +1,14 @@
 package kr.hhplus.be.server.ticket.application.service.redis;
 
 import jakarta.transaction.Transactional;
-import kr.hhplus.be.server.common.event.ConcertSoldOutEvent;
+import kr.hhplus.be.server.concert.event.ConcertSoldOutEvent;
 import kr.hhplus.be.server.common.exceptions.NotFoundException;
 import kr.hhplus.be.server.common.exceptions.TicketPurchaseException;
 import kr.hhplus.be.server.common.messages.MessageCode;
 import kr.hhplus.be.server.common.redis.RedisCacheTemplate;
 import kr.hhplus.be.server.common.redis.RedisDistributedLockTemplate;
 import kr.hhplus.be.server.common.redis.RedisKeyUtils;
+import kr.hhplus.be.server.concert.event.ConcertTicketPurchaseEvent;
 import kr.hhplus.be.server.ticket.application.port.in.PurchaseTicketRedisUseCase;
 import kr.hhplus.be.server.ticket.application.port.in.dto.PurchaseTicketCommandDto;
 import kr.hhplus.be.server.ticket.domain.model.Ticket;
@@ -33,8 +34,8 @@ public class PurchaseTicketRedisServiceImpl implements PurchaseTicketRedisUseCas
     private final RedisDistributedLockTemplate lockTemplate;
     private final TicketDomainService ticketDomainService;
     private final TicketRepository ticketRepository;
-    private final RedisCacheTemplate redisCacheTemplate;  // 추가
-    private final ApplicationEventPublisher eventPublisher;  // 추가
+    private final RedisCacheTemplate redisCacheTemplate;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -74,12 +75,12 @@ public class PurchaseTicketRedisServiceImpl implements PurchaseTicketRedisUseCas
                         // 5. 구매처리
                         ticket.completePurchase(userId); // 상태를 PAID로 변경
 
+                        eventPublisher.publishEvent(ConcertTicketPurchaseEvent.fromTicketEntity(ticket));
+
                         // 6. 매진 체크 및 이벤트
                         if (remaining == 0) {
                             eventPublisher.publishEvent(new ConcertSoldOutEvent(concertScheduleId, ticket.getConcertInfo(), LocalDateTime.now()));
                         }
-
-                        //TODO : 여기에도 티켓 판매시에 대기열 제거 이벤트가 일어나야 하나?`
 
                         return PurchaseTicketCommandDto.Response.builder()
                                 .ticketId(ticketId)

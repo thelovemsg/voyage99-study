@@ -3,7 +3,7 @@ package kr.hhplus.be.server.concert.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import kr.hhplus.be.server.concert.controller.dto.ConcertScheduleCreateDto;
 import kr.hhplus.be.server.concert.controller.dto.ConcertScheduleInfoDto;
-import kr.hhplus.be.server.concert.controller.dto.RankingInfo;
+import kr.hhplus.be.server.concert.controller.handler.RankingInfo;
 import kr.hhplus.be.server.concert.service.ConcertScheduleService;
 import kr.hhplus.be.server.concert.service.RankingService;
 import lombok.RequiredArgsConstructor;

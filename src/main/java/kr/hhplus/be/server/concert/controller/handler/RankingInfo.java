@@ -1,4 +1,4 @@
-package kr.hhplus.be.server.concert.controller.dto;
+package kr.hhplus.be.server.concert.controller.handler;
 
 import lombok.*;
 

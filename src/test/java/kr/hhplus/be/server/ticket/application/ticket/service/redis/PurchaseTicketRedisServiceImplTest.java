@@ -1,11 +1,11 @@
 package kr.hhplus.be.server.ticket.application.ticket.service.redis;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import kr.hhplus.be.server.common.event.ConcertSoldOutEvent;
+import kr.hhplus.be.server.concert.event.ConcertSoldOutEvent;
 import kr.hhplus.be.server.common.redis.RedisCacheTemplate;
 import kr.hhplus.be.server.common.redis.RedisKeyUtils;
 import kr.hhplus.be.server.common.utils.IdUtils;
-import kr.hhplus.be.server.concert.controller.dto.RankingInfo;
+import kr.hhplus.be.server.concert.controller.handler.RankingInfo;
 import kr.hhplus.be.server.concert.domain.ConcertScheduleEntity;
 import kr.hhplus.be.server.concert.enums.CommonStatusEnum;
 import kr.hhplus.be.server.concert.repository.ConcertScheduleJpaRepository;
