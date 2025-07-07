@@ -75,9 +75,10 @@ public class PurchaseTicketRedisServiceImpl implements PurchaseTicketRedisUseCas
                         // 5. 구매처리
                         ticket.completePurchase(userId); // 상태를 PAID로 변경
 
+                        // 6. 티켓 구매 정보 전송용 이벤트 호출
                         eventPublisher.publishEvent(ConcertTicketPurchaseEvent.fromTicketEntity(ticket));
 
-                        // 6. 매진 체크 및 이벤트
+                        // 7. 매진 체크 및 이벤트
                         if (remaining == 0) {
                             eventPublisher.publishEvent(new ConcertSoldOutEvent(concertScheduleId, ticket.getConcertInfo(), LocalDateTime.now()));
                         }

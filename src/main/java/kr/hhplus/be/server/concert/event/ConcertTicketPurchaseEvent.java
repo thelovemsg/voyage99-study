@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ConcertTicketPurchaseEvent {
 
     private Long ticketId;
@@ -42,4 +43,5 @@ public class ConcertTicketPurchaseEvent {
                 .cancelledAt(ticket.getCancelledAt())
                 .build();
     }
+
 }

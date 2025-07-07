@@ -5,7 +5,6 @@ import kr.hhplus.be.server.ticket.application.port.in.dto.GetTicketCommandDto;
 import kr.hhplus.be.server.ticket.application.port.in.dto.PurchaseTicketCommandDto;
 import kr.hhplus.be.server.ticket.application.port.in.dto.ReserveTicketCommandDto;
 import kr.hhplus.be.server.ticket.application.service.*;
-import kr.hhplus.be.server.ticket.application.ticket.service.*;
 import kr.hhplus.be.server.ticket.application.service.redis.PurchaseTicketRedisServiceImpl;
 import kr.hhplus.be.server.ticket.application.service.redis.ReserveTicketRedisServiceImpl;
 import lombok.RequiredArgsConstructor;

@@ -38,6 +38,9 @@ dependencies {
 	// Redisson 추가
 	implementation("org.redisson:redisson-spring-boot-starter:3.35.0")
 
+	// WebClient 추가
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+
 	//tsid
 	implementation("io.hypersistence:hypersistence-utils-hibernate-60:3.7.3")
 
