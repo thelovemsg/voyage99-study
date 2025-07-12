@@ -35,6 +35,19 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
+	// Redisson 추가
+	implementation("org.redisson:redisson-spring-boot-starter:3.35.0")
+
+	// WebClient 추가
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+	//tsid
+	implementation("io.hypersistence:hypersistence-utils-hibernate-60:3.7.3")
+
+	//lombok
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
+
     // DB
 	runtimeOnly("com.mysql:mysql-connector-j")
 
@@ -44,9 +57,16 @@ dependencies {
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:mysql")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	testCompileOnly("org.projectlombok:lombok")
+	testAnnotationProcessor("org.projectlombok:lombok")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
 	systemProperty("user.timezone", "UTC")
+}
+
+tasks.withType<JavaCompile> {
+	options.annotationProcessorPath = configurations.annotationProcessor.get()
 }
