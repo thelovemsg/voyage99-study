@@ -41,4 +41,7 @@ public class UserEntity {
         return this.pointAmount.compareTo(amount) >= 0;
     }
 
+    public void addPoint(BigDecimal point) {
+        this.pointAmount = this.pointAmount.add(point);
+    }
 }

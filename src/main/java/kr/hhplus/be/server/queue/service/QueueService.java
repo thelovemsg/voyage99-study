@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.*;
 
 @Slf4j
@@ -72,30 +73,23 @@ public class QueueService {
         Long userId = request.getUserId();
         Long concertScheduleId = request.getConcertScheduleId();
 
-        String queueKey = "queue:" + concertScheduleId;
+        String queueKey = "queue:user:" + concertScheduleId;
+        String userStateKey = "queue:user:" + concertScheduleId + ":" + userId;
+        String state = redisTemplate.opsForValue().get(userStateKey);
 
-        // 이미 대기열에 있는지 확인 (JSON으로 저장된 상태에서)
-        Set<String> allUsers = redisTemplate.opsForZSet().range(queueKey, 0, -1);
-        for (String userJson : allUsers) {
-            QueueDetailInfo existing = objectMapper.readValue(userJson, QueueDetailInfo.class);
-            if (existing.getUserId().equals(userId)) {
-                // 기존 사용자 발견
-                return QueueRedisCreateCommandDto.Response.builder()
-                        .userId(userId)
-                        .position(existing.getCurrentPosition())
-                        .message("이미 대기열에 있습니다.")
-                        .build();
-            }
+        if ("active".equals(state)) {
+            return QueueRedisCreateCommandDto.Response.builder()
+                    .userId(userId)
+                    .message("이미 대기열에 있습니다.")
+                    .build();
         }
 
         // 먼저 현재 대기열 크기 확인
         Long currentQueueSize = redisTemplate.opsForZSet().zCard(queueKey);
         int newPosition = (currentQueueSize != null ? currentQueueSize.intValue() : 0) + 1;
-
-        // 새로 대기열 진입
         long timestamp = System.currentTimeMillis();
 
-        // QueueDetailInfo 객체를 JSON으로 저장
+        // QueueDetailInfo 객체 생성
         QueueDetailInfo queueInfo = QueueDetailInfo.builder()
                 .userId(userId)
                 .concertScheduleId(concertScheduleId)
@@ -116,6 +110,11 @@ public class QueueService {
 
         log.info("Redis 대기열 진입 - 사용자: {}, 공연: {}, 순위: {}, 예상대기시간: {}분",
                 userId, concertScheduleId, newPosition, estimatedWaitMinutes);
+
+        redisTemplate.multi();
+        redisTemplate.opsForZSet().add(queueKey, objectMapper.writeValueAsString(queueInfo), timestamp);     // 1번
+        redisTemplate.opsForValue().set(userStateKey, "active", Duration.ofMinutes(30)); // 2번
+        redisTemplate.exec();
 
         return QueueRedisCreateCommandDto.Response.builder()
                 .userId(userId)

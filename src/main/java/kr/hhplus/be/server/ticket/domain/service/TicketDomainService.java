@@ -40,4 +40,9 @@ public class TicketDomainService {
         userEntity.usePoint(amount);
         userValidationPort.saveUser(userEntity);
     }
+
+    public void refundUserPoint(UserEntity userEntity, BigDecimal amount) {
+        userEntity.addPoint(amount);
+        userValidationPort.saveUser(userEntity);
+    }
 }
