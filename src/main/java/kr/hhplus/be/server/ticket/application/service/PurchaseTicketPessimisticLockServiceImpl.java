@@ -12,6 +12,10 @@ import kr.hhplus.be.server.ticket.domain.service.TicketDomainService;
 import kr.hhplus.be.server.user.domain.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.QueryTimeoutException;
+import org.springframework.dao.TransientDataAccessResourceException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -24,6 +28,10 @@ public class PurchaseTicketPessimisticLockServiceImpl implements PurchaseTicketP
 
     @Override
     @Transactional
+    @Retryable(
+            retryFor = {TransientDataAccessResourceException.class, QueryTimeoutException.class},
+            backoff = @Backoff(delay = 1000, multiplier = 2) // 1초, 2초, 4초 간격
+    )
     public PurchaseTicketCommandDto.Response purchaseWithPessimisticLock(PurchaseTicketCommandDto.Request request) {
         Long userId = request.getUserId();
         Long concertScheduleId = request.getConcertScheduleId();

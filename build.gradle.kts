@@ -38,6 +38,9 @@ dependencies {
 	// Redisson 추가
 	implementation("org.redisson:redisson-spring-boot-starter:3.35.0")
 
+	// spring retry
+	implementation ("org.springframework.retry:spring-retry")
+
 	// WebClient 추가
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 
