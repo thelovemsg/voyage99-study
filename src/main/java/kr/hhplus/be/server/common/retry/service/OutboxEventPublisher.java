@@ -2,6 +2,7 @@ package kr.hhplus.be.server.common.retry.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import kr.hhplus.be.server.common.kafka.event.KafkaEventPublisher;
 import kr.hhplus.be.server.common.retry.model.EventTypeEnum;
 import kr.hhplus.be.server.common.retry.model.OutboxEventEntity;
 import kr.hhplus.be.server.common.retry.repository.OutboxEventRepository;
@@ -9,7 +10,6 @@ import kr.hhplus.be.server.concert.event.ConcertSoldOutEvent;
 import kr.hhplus.be.server.concert.event.ConcertTicketPurchaseEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,8 @@ import java.util.List;
 public class OutboxEventPublisher {
 
     private final OutboxEventRepository outboxEventRepository;
-    private final ApplicationEventPublisher eventPublisher;
+//    private final ApplicationEventPublisher eventPublisher;
+    private final KafkaEventPublisher kafkaEventPublisher;  // ✅ 변경
     private final ObjectMapper objectMapper;
 
     @Scheduled(fixedDelay = 5000)
@@ -40,8 +41,11 @@ public class OutboxEventPublisher {
                 // Outbox에서 이벤트 복원
                 Object event = deserializeEvent(outboxEvent);
 
-                // ✅ 여기서 기존 이벤트 리스너들이 처리!
-                eventPublisher.publishEvent(event);
+                // 여기서 기존 이벤트 리스너들이 처리!
+//                eventPublisher.publishEvent(event);
+
+                // 카프카로 메세지 전송
+                kafkaEventPublisher.publishEvent(event);
 
                 // 성공 시 처리 완료 표시
                 outboxEvent.markAsProcessed();
@@ -54,11 +58,19 @@ public class OutboxEventPublisher {
                 outboxEvent.incrementRetry();
                 outboxEventRepository.save(outboxEvent);
 
-                if (outboxEvent.canRetry()) {
+                /*if (outboxEvent.canRetry()) {
                     log.warn("Outbox 이벤트 발행 실패, 재시도 예정: id={}, retryCount={}",
                             outboxEvent.getId(), outboxEvent.getRetryCount(), e);
                 } else {
                     log.error("Outbox 이벤트 최대 재시도 초과: id={}, 수동 처리 필요",
+                            outboxEvent.getId(), e);
+                }*/
+
+                if (outboxEvent.canRetry()) {
+                    log.warn("Kafka 이벤트 발행 실패, 재시도 예정: id={}, retryCount={}",
+                            outboxEvent.getId(), outboxEvent.getRetryCount(), e);
+                } else {
+                    log.error("Kafka 이벤트 최대 재시도 초과: id={}, 수동 처리 필요",
                             outboxEvent.getId(), e);
                 }
             }

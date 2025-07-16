@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    # zookeeper 역할
+    # 1. 브로커 관리 : 클러스터 내 브로커 목록 관리
+    # 2. 토픽 메타데이터 : 토픽, 파티션, 복제본 정보 저장
+    # 3. 리더 선출 : 파티션 리더 선출 조정
+    # 4. 설정 관리 : 크럴스터 설정 정보 저장
+    # 5. ACL 관리 : 보안 및 권한 정보 관리
+    image: confluentinc/cp-zookeeper:7.6.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  broker1:
+    image: confluentinc/cp-kafka:7.6.0
+    hostname: broker1
+    container_name: broker1
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1 # 브로커 아이디 설정
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181' # 우리가 위에 설정한 zookeeper의 포트 2181과 연결
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT # KAFKA_LISTENER_SECURITY_PROTOCOL_MAP
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker1:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # 전체 레플리카 수가 1개 => 리더만 존재하고 팔로워는 없는 상태.
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1 # 트랜잭션 상태 로그의 최소 동기화 레플리카 수. 트랜잭션 상태 변경 시 최소 1개의 레플리카가 동기화되어야 변경 작업을 승인한다는 의미
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1 #  카프카의 트랜잭션 상태를 저장하는 내부 토픽의 복제본 개수
+      KAFKA_LOG_RETENTION_MS: 604800000
+      KAFKA_LOG_RETENTION_BYTES: 1073741824
+
+  broker2:
+    image: confluentinc/cp-kafka:7.6.0
+    hostname: broker2
+    container_name: broker2
+    ports:
+      - "9093:9093"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker2:29093,PLAINTEXT_HOST://localhost:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_MS: 604800000
+      KAFKA_LOG_RETENTION_BYTES: 1073741824
+
+  broker3:
+    image: confluentinc/cp-kafka:7.6.0
+    hostname: broker3
+    container_name: broker3
+    ports:
+      - "9094:9094"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker3:29094,PLAINTEXT_HOST://localhost:9094
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_MS: 604800000
+      KAFKA_LOG_RETENTION_BYTES: 1073741824

@@ -123,10 +123,6 @@ public class PurchaseTicketRedisServiceImpl implements PurchaseTicketRedisUseCas
         );
     }
 
-
-    /**
-     * ✅ 새로 구현: 이벤트를 Outbox에 저장
-     */
     private void saveEventsToOutbox(Ticket ticket, Long concertScheduleId, Boolean isFirst) {
         try {
             // 1. 티켓 구매 이벤트 → Outbox 저장
@@ -137,6 +133,7 @@ public class PurchaseTicketRedisServiceImpl implements PurchaseTicketRedisUseCas
                     .eventType(EventTypeEnum.TICKET_PURCHASED)  // Enum 사용
                     .payload(objectMapper.writeValueAsString(purchaseEvent))
                     .build();
+
             outboxEventRepository.save(ticketEvent);
 
             // 2. 매진 이벤트 → Outbox 저장 (매진인 경우에만)
@@ -152,6 +149,7 @@ public class PurchaseTicketRedisServiceImpl implements PurchaseTicketRedisUseCas
                         .eventType(EventTypeEnum.CONCERT_SOLD_OUT)  // Enum 사용
                         .payload(objectMapper.writeValueAsString(soldOutEvent))
                         .build();
+
                 outboxEventRepository.save(soldOutOutboxEvent);
             }
 
